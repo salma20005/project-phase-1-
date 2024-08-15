@@ -1,2 +1,63 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+#include<iostream>
+using namespace std;
+class Person{
+    string name;
+    int id;
+    string password;
+    double balance;
+public:
+    Person(){
+        id = 0;
+        balance = 0;
+    }
+    Person(string s , int i , string p , double b ){
+        name = s ;
+        id = i;
+        password = p;
+        balance = b;
+    }
+    void setName(string s ){
+        name =s ;
+    }
+    string getName(){
+        return name;
+    }
+    void setId(int i  ){
+       id = i;
+    }
+    int getId(){
+        return id;
+    }
+    void setPassword(string p ){
+        password = p;
+    }
+    string getPassword(){
+        return password;
+    }
+    void setBalance(double b ){
+        balance = b;
+    }
+    double getBalance(){
+        return balance;
+    }
+
+};
+class Employee:public Person{
+    double salary;
+public:
+    Employee(){
+        salary=0;
+    }
+
+
+
+};
+int main() {
+
+
+
+
+    return 0;
+}
