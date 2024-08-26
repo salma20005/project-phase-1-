@@ -60,9 +60,9 @@ class Person {
             password = "";
         }
 
-        Person(string s, int i, string p) {
+        Person(string n, int i, string p) {
             setId(i);
-            setName(s);
+            setName(n);
             setPassword(p);
 
         }
@@ -89,7 +89,7 @@ class Person {
 
         void setPassword(string p) {
             if (Validation::validatePass(p)) {
-                name = p;
+                password = p;
             } else {
                 cout << "Invalid password\n";
             }
@@ -102,7 +102,7 @@ class Person {
         void display() {
             cout << "Name is : " << name << endl;
             cout << "Id is : " << id << endl;
-            cout << "Password is " << password;
+            cout << "Password is :" << password <<endl;
         }
     };
 
@@ -114,7 +114,7 @@ class Person {
             balance = 0;
         }
 
-        Client(string s, int i, string p, double b) : Person(s, i, p) {
+        Client(string n, int i, string p, double b) : Person(n, i, p) {
             setBalance(b);
         }
 
@@ -204,13 +204,12 @@ class Person {
     };
 
     int main() {
-        Employee emp("Michelle", 1234, "securePass123", 5000);
+        Employee emp("michele",123,"secure1254",5000);
         emp.DisplayInfo();
         Client c1, c2;
         c1.setBalance(2000);
         c1.deposite(1500);
         c1.transferTo(1000, c2);
-        cout << "The balance is : ";
         c1.checkBalance();
         cout << endl;
         return 0;
