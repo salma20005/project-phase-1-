@@ -1,202 +1,217 @@
 //# Auto detect text files and perform LF normalization
+# pragma once
 #include<iostream>
 #include<string>
 #include<cctype>
 
 using namespace std;
 
-string namecheck(string s) {
-    if(s.size() < 5 || s.size() > 20) {
-        return "name must be between 5 and 20 char";
+
+class Validation {
+public:
+    static bool validateName(string name) {
+        if (!(name.size() >= 5 && name.size() <= 20)) {
+            cout << "The size is not valid\n ";
+            return false;
+        }
+        for (int i = 0; i < name.size(); i++) {
+            if (!(name[i] >= 'a' && name[i] <= 'z' || name[i] >= 'A' && name[i] <= 'Z')) {
+                return false;
+            }
+        }
+        return true;
     }
-    for(char c : s) {
-        if(!isalpha(c)) {
-            return "name must be alphabetical only";
+
+    static bool validatePass(string pass) {
+        if (pass.size() >= 8 && pass.size() <= 20) {
+            return true;
+        } else {
+            cout << " the password must be >= 8 And <= 20\n";
+            return false;
         }
     }
-    return s;
-}
 
-string CheckPass(string p){
-    if(p.size() < 8 || p.size() > 20) {
-        return "password min. lenght is 8 and max length is 20";
+    static bool valiadateBalance(double balance) {
+        if (balance < 1500) {
+            return false;
+        }
+        return true;
+
     }
-    return p;
-}
 
-double CheckSalary(double b ){
-    if(b < 5000){
-        cout << "The conditions not achieved" << endl;
-        return -1;
+    static bool validateSalary(double salary) {
+        if (salary < 5000) {
+            return false;
+        }
+        return true;
     }
-    return b;
-}
 
-double balanceCheck(double balance){
-if (balance < 1500){
-        cout << "Invalid Balance" <<endl;
-    return -1 ;
-}
-return balance;
-
-}
-
-
+};
 class Person {
-protected:
-    string name;
-    int id;
-    string password;
+    protected:
+        string name;
+        int id;
+        string password;
 
-public:
-    Person() {
-        id = 0;
-    }
-
-    Person(string s , int i , string p ) {
-        name = namecheck(s);
-        id = i;
-        password = CheckPass(p);
-    }
-
-    void setName(string s ) {
-        string result = namecheck(s);
-        if (result != "") {
-            name = result;
-        } else {
-            cout << "Invalid name provided." << endl;
-        }
-    }
-
-    string getName() {
-        return name;
-    }
-
-    void setId(int i  ) {
-        id = i;
-    }
-
-    int getId() {
-        return id;
-    }
-
-    void setPassword(string p ) {
-        string result = CheckPass(p);
-        if (result != "") {
-            password = result;
-        } else {
-            cout << "Invalid password provided." << endl;
-        }
-    }
-
-    string getPassword() {
-        return password;
-    }
-};
-
-class Client: public Person {
-double balance;
-
-public:
-
-    void setBalance(double balance){
-    double result = balanceCheck(balance);
-    if (result >= 1500){
-    this-> balance = result;
-     } else{
-         cout << "Invalid Balance" <<endl;
-     }
-    }
-
-    double getBalance(){
-     return balance;
-    }
-
-    void deposite(double amount){
-    balance += amount;
-    }
-
-    void withdraw(double amount){
-        if (amount > balance){
-            cout << "Not Enough Balance";
-        } else{
-           balance -= amount;
-        }
-    }
-
-    void transferTo(double amount, Client& c){
-        if (amount <= balance){
-            c.deposite(amount);
-            balance-=amount;
-        }
-    else {
-        cout << "amount exceeds" << endl;
-    }
-    }
-
-    void checkBalance(){
-        if ( balanceCheck(balance) >= 1500){
-            cout << this-> balance;
-        }
-    else{
-        cout << "Invalid Balance";
-    }
-
-    }
-    void DisplayInfo(){
-        cout << "Name is : "<< getName() << endl;
-        cout << "Id is : "<<getId()<< endl;
-        cout << "The password is : "<< getPassword()   << endl;
-        cout << "The Balance is : " <<  getBalance() << endl;
-    }
-};
-
-
-
-class Employee : public Person {
-    double salary;
-public:
-    Employee() {
-        salary = 0;
-    }
-
-    Employee(string n ,int i , string p  , double s ) : Person(n,i,p) {
-        salary = CheckSalary(s);
-        if(salary == -1){
-            cout << "Invalid Salary is provided"<< endl;
-            salary =0;
+    public:
+        Person() {
+            id = 0;
+            name = "";
+            password = "";
         }
 
-    }
-    void setSalary(double s ){
-        double result = CheckSalary(s);
-        if (result != -1) {
-            salary = result;
-        } else {
-            cout << "Invalid salary provided." << endl;
+        Person(string s, int i, string p) {
+            setId(i);
+            setName(s);
+            setPassword(p);
+
         }
-    }
-    double getSalary(){
-        return salary;
-    }
-    void DisplayInfo(){
-        cout << "Name is : "<< getName() << endl;
-        cout << "Id is : "<<getId()<< endl;
-        cout << "The password is : "<< getPassword()   << endl;
-        cout << "The salary is : "<< getSalary() << endl;
-    }
-};
 
-int main() {
-    Employee emp("Michelle", 1234, "securePass123",5000);
-    emp.DisplayInfo();
-    Client c1,c2;
-    c1.setBalance(2000);
-    c1.deposite(1500);
-    c1.transferTo(1000,c2);
-    cout << "The balance is : ";
-    c1.checkBalance();
-    cout <<endl;
+        void setName(string s) {
+            if (Validation::validateName(s)) {
+                name = s;
+            } else {
+                cout << "Invalid name\n";
+            }
+        }
 
-    return 0;
+        string getName() {
+            return name;
+        }
+
+        void setId(int i) {
+            id = i;
+        }
+
+        int getId() {
+            return id;
+        }
+
+        void setPassword(string p) {
+            if (Validation::validatePass(p)) {
+                name = p;
+            } else {
+                cout << "Invalid password\n";
+            }
+        }
+
+        string getPassword() {
+            return password;
+        }
+
+        void display() {
+            cout << "Name is : " << name << endl;
+            cout << "Id is : " << id << endl;
+            cout << "Password is " << password;
+        }
+    };
+
+    class Client : public Person {
+        double balance;
+
+    public:
+        Client() : Person() {
+            balance = 0;
+        }
+
+        Client(string s, int i, string p, double b) : Person(s, i, p) {
+            setBalance(b);
+        }
+
+        void setBalance(double b) {
+            if (Validation::valiadateBalance(b)) {
+                balance = b;
+            } else {
+                cout << "Invalid Balance" << endl;
+            }
+        }
+
+        double getBalance() {
+            return balance;
+
+        }
+
+        void deposite(double amount) {
+            balance += amount;
+        }
+
+        void withdraw(double amount) {
+            if (amount > balance) {
+                cout << "Not Enough Balance";
+            } else {
+                balance -= amount;
+            }
+        }
+
+        void transferTo(double amount, Client &c) {
+            if (amount <= balance) {
+                c.deposite(amount);
+                balance -= amount;
+            } else {
+                cout << "amount exceeds" << endl;
+            }
+        }
+
+        void checkBalance() {
+            cout << "Balance : " << balance << endl;
+
+        }
+
+        void DisplayInfo() {
+            Person::display();
+            cout << "Balance is : " << balance;
+        }
+    };
+
+    class Employee : public Person {
+        double salary;
+    public:
+        Employee() {
+            salary = 0;
+        }
+
+        Employee(string n, int i, string p, double s) : Person(n, i, p) {
+            setSalary(s);
+        }
+
+        void setSalary(double s) {
+            if (Validation::validateSalary(s)) {
+                salary = s;
+            }
+            else cout << "Invalid salary\n";
+        }
+
+        double getSalary() {
+            return salary;
+        }
+
+        void DisplayInfo() {
+            Person::display();
+
+            cout << "The salary is : " << salary<< endl;
+        }
+
+    };
+
+    class Admin : public Employee {
+        Admin() : Employee() {
+
+        }
+
+        Admin(string n, int i, string p, double s) : Employee(n, i, p, s) {
+
+        }
+    };
+
+    int main() {
+        Employee emp("Michelle", 1234, "securePass123", 5000);
+        emp.DisplayInfo();
+        Client c1, c2;
+        c1.setBalance(2000);
+        c1.deposite(1500);
+        c1.transferTo(1000, c2);
+        cout << "The balance is : ";
+        c1.checkBalance();
+        cout << endl;
+        return 0;
 }
