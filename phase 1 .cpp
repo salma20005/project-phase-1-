@@ -344,14 +344,5 @@ public:
     }
 };
     int main() {
-        Employee emp("Michelle", 1234, "securePass123", 5000);
-        emp.DisplayInfo();
-        Client c1, c2;
-        c1.setBalance(2000);
-        c1.deposite(1500);
-        c1.transferTo(1000, c2);
-        cout << "The balance is : ";
-        c1.checkBalance();
-        cout << endl;
         return 0;
 }
