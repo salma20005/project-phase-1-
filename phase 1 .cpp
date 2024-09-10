@@ -84,7 +84,6 @@ class Person {
         string getName() {
             return name;
         }
-
         void setId(int i) {
             id = i;
         }
@@ -174,6 +173,7 @@ class Person {
         }
     };
     vector<Client> clients;
+    static inline Client* cl;
     class Employee : public Person {
         double salary;
     public:
@@ -201,9 +201,41 @@ class Person {
 
             cout << "The salary is : " << salary<< endl;
         }
-
+        void addClient(Client& c){
+            if(nameFlag == false && passFlag == false && balance_salary == false){
+                clients.push_back(c);
+            }
+            else{
+                cout << "Invalid";
+            };
+        }
+        Client* searchClient(int id){
+            for(int i = 0 ; i < clients.size() ; i++){
+                if(clients[i].getId() == id){
+                    cl = &clients[i];
+                    return cl;
+                    break;
+                }
+            }
+            return nullptr;
+        }
+        void listClient(){
+            cl->DisplayInfo();
+        }
+        void editClient(int id , string name , string password , double balance){
+            cl->setId(id);
+            cl->setName(name);
+            cl->setPassword(password);
+            cl->setBalance(balance);
+        }
+        void listClients(){
+            for(int i = 0 ; i < clients.size() ; i++){
+                clients[i].DisplayInfo();
+            }
+        }
     };
     vector<Employee> employees;
+    static inline Employee* em;
     class Admin : public Employee {
     public:
         Admin() : Employee() {
@@ -212,9 +244,41 @@ class Person {
         Admin(string n, int i, string p, double s) : Employee(n, i, p, s) {
 
         }
-
+        void addEmployee(Employee& e){
+            if(nameFlag == false && passFlag == false && balance_salary == false){
+                employees.push_back(e);
+            }
+            else{
+                cout << "Invalid";
+            };
+        }
+      Employee* searchEmployee(int id){
+            for(int i = 0 ; i < employees.size() ; i++){
+                if(employees[i].getId() == id){
+                    em = &employees[i];
+                    return em;
+                    break;
+                }
+            }
+            return nullptr;
+        }
+        void editEmployee(int id , string name ,string password , double salary){
+            em->setId(id);
+            em->setName(name);
+            em->setPassword(password);
+            em->setSalary(salary);
+        }
+        void listEmployee(){
+            em->DisplayInfo();
+        }
+        void listEmplpoyees(){
+            for(int i = 0 ; i < employees.size() ; i++){
+                employees[i].DisplayInfo();
+            }
+        }
     };
 vector <Admin> admins;
+static inline Admin* ad;
 class DataSourceInterface {
 public:
     DataSourceInterface() {};
@@ -341,6 +405,54 @@ public:
         for (int i = 0; i < admins.size(); i++) {
             addAdmin(admins[i]);
         }
+    }
+};
+class FilesHelper{
+public:
+    static void saveLast(string filename , int id){
+        fstream file(filename, ios ::out);
+        file<< to_string(id) << endl;
+        file.close();
+    }
+    static int getLast(string filename){
+        fstream file(filename,ios::in);
+        string id;
+        file >> id;
+        file.close();
+        int i = stoi(id);
+        return i;
+    }
+    static void saveClient(Client c){
+        FileManager f;
+        f.addClient(c);
+    }
+    static void saveEmployee(string filename , string lastIdFile, Employee e){
+        fstream file(filename, ios::app);
+        fstream file2(lastIdFile, ios::app);
+        string emp = to_string(e.getId()) + "," + e.getName() + "," + e.getPassword() + "," + to_string(e.getSalary());
+        file << emp << endl;
+        string lastID = to_string(e.getId());
+        file2 << lastID;
+        file.close();
+        file2.close();
+    }
+    static void getClients(){
+        FileManager f;
+        f.getAllClients();
+    }
+    static void getEmployees(){
+        FileManager f;
+        f.getAllEmployees();
+    }
+    static void getAdmins(){
+        FileManager f;
+        f.getAllAdmins();
+    }
+    static void clearFile(string filename,string lastIdFile){
+        fstream file(filename, ios :: out);
+        file.close();
+        fstream file2(lastIdFile,ios :: out);
+        file2.close();
     }
 };
     int main() {
